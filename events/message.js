@@ -6,5 +6,10 @@ module.exports = (client, msg) => {
   const command = args.shift().toLowerCase();
   const cmd = client.commands.get(command);
   if (!cmd) return;
-  cmd.run(client, msg, args);
+  try {
+    cmd.run(client, msg, args);
+  } catch (e) {
+    console.log(`Error while executing command ${command}:\n${e}`);
+    msg.reply("Something went wrong while executing this command, please contact the developer.");
+  }
 };
