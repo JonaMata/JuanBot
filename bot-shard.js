@@ -5,6 +5,7 @@ const fs = require('fs');
 const cassette = require('cassette');
 const ytdl = require('ytdl-core');
 const client = new Discord.Client();
+const client.shardClient = new Discord.ShardClientUtil(client);
 
 client.on('ready', () => {
 	console.log(`\n\nLogged in as ${client.user.tag}!`);
