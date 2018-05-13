@@ -18,15 +18,18 @@ exports.play = async (client, msg, args) => {
   if(!query.toLowerCase().startsWith('http')) {
     query = 'gvsearch1:' + query;
   }
+  msg.channel.send('Searching...').then(response => {
+    youtubedl.getInfo(query, ['-q', '--no-warnings', '--force-ipv4'], (err, info) => {
+      if (err) return;
 
-  youtubedl.getInfo(query, ['-q', '--no-warnings', '--force-ipv4'], (err, info) => {
-    if (err) return;
-
-    playlist.push(info);
-    if (playlist.length === 1) {
-      music.executePlaylist(client, msg, playlist);
-    }
-  });
+      response.edit('Added: ' + info.title).then(() => {
+        playlist.push(info);
+        if (playlist.length === 1) {
+          music.executePlaylist(client, msg, playlist);
+        }
+      });
+    });
+  })
 };
 
 exports.executePlaylist = (client, msg, playlist) => {
@@ -43,12 +46,14 @@ exports.executePlaylist = (client, msg, playlist) => {
   }).then(connection => {
     const song = playlist[0];
 
-    players[msg.guild.id] = connection.playStream(ytdl(song.webpage_url, {filter: 'audioonly'}));
-    players[msg.guild.id].on('end', () => {
+    music.players[msg.guild.id] = connection.playStream(ytdl(song.webpage_url, {filter: 'audioonly'}));
+    music.players[msg.guild.id].on('end', () => {
       setTimeout(() => {
         if (playlist.length > 0) {
           playlist.shift();
           music.executePlaylist(client, msg, playlist);
+        } else {
+          connection.disconnect();
         }
       }, 1000);
     });
@@ -68,8 +73,7 @@ exports.list = (client, msg) => {
   var songList = 'Current playlist:\n';
   var playlist = music.getPlaylist(client, msg.guild.id);
   if(playlist.length > 0) {
-    var preChar = ()
-    songList += preChar + playlist[0].title + '\n';
+    songList += '>' + playlist[0].title + '\n';
     for(var i = 1; i < playlist.length; i++) {
         songList += '-' + playlist[i].title + '\n';
     }
