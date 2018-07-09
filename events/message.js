@@ -1,4 +1,5 @@
 module.exports = (client, msg) => {
+
   if (msg.author.bot) return;
   if(msg.content.indexOf(client.config.prefix) !== 0) return;
 

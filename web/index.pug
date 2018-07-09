@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title= title
+  body
+    h1= title
+    br
+    ul
+      each member in members
+        li= member
+
+    h2 To get notifications on your phone use the button below
+    include ./pushbullet.html

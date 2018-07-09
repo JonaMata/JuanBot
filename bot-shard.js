@@ -5,11 +5,20 @@ const fs = require('fs');
 const cassette = require('cassette');
 const ytdl = require('ytdl-core');
 const client = new Discord.Client();
-const client.shardClient = new Discord.ShardClientUtil(client);
+const express = require('express');
+const {Wit, log} = require('node-wit');
+
+client.shardClient = new Discord.ShardClientUtil(client);
 
 client.on('ready', () => {
 	console.log(`\n\nLogged in as ${client.user.tag}!`);
-	client.user.setActivity('my Banjo');
+	client.user.setActivity('juanbot.juanto3.me');
+
+	const port = 9001 + client.shardClient.id;
+
+	const server = app.listen(port, () => {
+	  console.log(`Web server running on port ${port}`);
+	});
 });
 
 
@@ -62,3 +71,30 @@ process.on('uncaughtException', (err) => {
 */
 
 client.login(Config.token);
+
+
+
+const app = express();
+app.set('view engine', 'pug');
+
+app.get('/*', (req, res) => {
+  file = (req.url == '/') ? '/index' : req.url;
+	if (file == '/index.php') file = '/index';
+  var members = [];
+	client.guilds.array().forEach((guild) => {
+		guild.members.array().forEach(member => {
+			if (member.presence.status == 'online' && !member.user.bot) members.push(member.user.username);
+		});
+	});
+	members = Array.from(new Set(members));
+  res.render(__dirname + '/web' + file, {title: 'JuanBot Online users list', members: members});
+});
+
+
+
+/*
+client.witClient = new Wit({
+	accessToken: Config.witAccessToken,
+	logger: new log.Logger(log.DEBUG)
+});
+*/

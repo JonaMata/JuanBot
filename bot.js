@@ -10,7 +10,7 @@ Sharder.on('launch', shard => console.log(`launched ${shard.id}`));
 Sharder.spawn();
 
 Sharder.on('message', (message) => {
-  if (message === restart) {
+  if (message === 'restart') {
     Sharder.shards.forEach((shard) => {
       shard.process.kill();
     })

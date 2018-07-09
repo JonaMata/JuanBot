@@ -46,16 +46,23 @@ exports.executePlaylist = (client, msg, playlist) => {
   }).then(connection => {
     const song = playlist[0];
 
-    music.players[msg.guild.id] = connection.playStream(ytdl(song.webpage_url, {filter: 'audioonly'}));
-    music.players[msg.guild.id].on('end', () => {
-      setTimeout(() => {
-        if (playlist.length > 0) {
-          playlist.shift();
-          music.executePlaylist(client, msg, playlist);
-        } else {
-          connection.disconnect();
-        }
-      }, 1000);
+    new Promise((resolve, reject) => {
+      music.players[msg.guild.id] = connection.playStream(ytdl(song.webpage_url, {filter: 'audioonly'}));
+      resolve(music.players[msg.guild.id]);
+    }).then( player => {
+      player.on('end', () => {
+        setTimeout(() => {
+          if (playlist.length > 0) {
+            playlist.shift();
+            music.executePlaylist(client, msg, playlist);
+          } else {
+            connection.disconnect();
+          }
+        }, 1000);
+    }).catch(err => {
+      console.log(err);
+    });
+
     });
   }).catch(err => {
     console.log(err);

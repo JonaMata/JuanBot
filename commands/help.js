@@ -1,7 +1,9 @@
 exports.run = (client, msg, args) => {
   var commandFields = [];
   client.commands.keyArray().forEach(command => {
-    if (client.commands.get(command).help) commandFields.push({name: client.config.prefix + command, value: client.commands.get(command).help});
+    var helpValue = (client.commands.get(command).help) ? client.commands.get(command).help : 'No info provided';
+    console.log(helpValue);
+    commandFields.push({name: client.config.prefix + command, value: helpValue});
   });
   msg.author.send({embed: {
     color: 2447003,
