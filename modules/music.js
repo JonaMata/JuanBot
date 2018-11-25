@@ -1,6 +1,12 @@
-const youtubedl = require('youtube-dl');
+//const youtubedl = require('youtube-dl');
+const youtubeSearch = require('youtube-search-promise');
 const ytdl = require('ytdl-core');
 const Config = require('../config.json');
+
+var opts = {
+	maxResults: 1,
+	key: Config.youtubeKey
+};
 
 exports.ytdl = ytdl;
 
@@ -19,11 +25,12 @@ exports.play = async (client, msg, args) => {
     query = 'gvsearch1:' + query;
   }
   msg.channel.send('Searching...').then(response => {
-    youtubedl.getInfo(query, ['-q', '--no-warnings', '--force-ipv4'], (err, info) => {
-      if (err) return;
-
-      response.edit('Added: ' + info.title).then(() => {
-        playlist.push(info);
+    youtubeSearch(query, opts).catch(error => {
+	response.edit('Error occured while searching for song: '+err);
+    }).then(info => {
+	console.log(info[0]);
+      response.edit('Added: ' + info[1].title).then(() => {
+        playlist.push(info[0]);
         if (playlist.length === 1) {
           music.executePlaylist(client, msg, playlist);
         }
@@ -47,7 +54,7 @@ exports.executePlaylist = (client, msg, playlist) => {
     const song = playlist[0];
 
     new Promise((resolve, reject) => {
-      music.players[msg.guild.id] = connection.playStream(ytdl(song.webpage_url, {filter: 'audioonly'}));
+      music.players[msg.guild.id] = connection.playStream(ytdl(song.link, {filter: 'audioonly'}));
       resolve(music.players[msg.guild.id]);
     }).then( player => {
       player.on('end', () => {
