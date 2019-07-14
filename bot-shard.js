@@ -14,7 +14,7 @@ client.on('ready', () => {
 	console.log(`\n\nLogged in as ${client.user.tag}!`);
 	client.user.setActivity('juanbot.juanto3.me');
 
-	const port = 9001 + client.shardClient.id;
+	const port = Config.PORT + client.shardClient.id;
 
 	const server = app.listen(port, () => {
 	  console.log(`Web server running on port ${port}`);
