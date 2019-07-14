@@ -1,7 +1,7 @@
 //const youtubedl = require('youtube-dl');
 const youtubeSearch = require('youtube-search-promise');
 const ytdl = require('ytdl-core');
-const Config = require('../config.json');
+const Config = process.env;
 
 var opts = {
 	maxResults: 1,
