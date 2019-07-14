@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const Config = require('./config.json');
+const Config = process.env;
 
 const Sharder = new Discord.ShardingManager('bot-shard.js', {
   respawn: true,
