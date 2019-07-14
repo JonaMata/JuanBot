@@ -3,7 +3,7 @@ const Config = process.env;
 
 const Sharder = new Discord.ShardingManager('bot-shard.js', {
   respawn: true,
-  token: Config.token
+  token: Config.TOKEN
 });
 Sharder.on('launch', shard => console.log(`launched ${shard.id}`));
 
