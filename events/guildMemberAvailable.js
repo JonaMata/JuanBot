@@ -6,7 +6,7 @@ module.exports = (client, member) => {
     url: 'https://api.pushbullet.com/v2/pushes',
     method:'POST',
     headers: {
-      'Access-Token': client.config.pushAPIkey,
+      'Access-Token': client.config.PUSHAPIKEY,
       'Content-Type': 'application/json'
     },
     json: true,
