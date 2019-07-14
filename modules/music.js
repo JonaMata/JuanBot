@@ -5,7 +5,7 @@ const Config = process.env;
 
 var opts = {
 	maxResults: 1,
-	key: Config.youtubeKey
+	key: Config.YOUTUBEKEY
 };
 
 exports.ytdl = ytdl;
