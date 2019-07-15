@@ -1,4 +1,8 @@
 const Config = process.env;
+
+const Sentry = require('@sentry/node');
+Sentry.init({ dsn: Config.SENTRYURL });
+
 const Discord = require('discord.js');
 const Enmap = require('enmap');
 const fs = require('fs');
