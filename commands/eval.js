@@ -1,5 +1,5 @@
 exports.run = async (client, msg, args) => {
-  if(msg.member.id === client.config.adminid) {
+  if(msg.member.id === client.config.ADMINID) {
     if (args.join(' ').toLowerCase() === 'restart') {
       client.shardClient.broadcastEval('\
         client.guilds.forEach((guild) => {\
