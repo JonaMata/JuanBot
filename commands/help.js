@@ -3,7 +3,7 @@ exports.run = (client, msg, args) => {
   client.commands.keyArray().forEach(command => {
     var helpValue = (client.commands.get(command).help) ? client.commands.get(command).help : 'No info provided';
     console.log(helpValue);
-    commandFields.push({name: client.config.prefix + command, value: helpValue});
+    commandFields.push({name: client.config.PREFIX + command, value: helpValue});
   });
   msg.author.send({embed: {
     color: 2447003,
