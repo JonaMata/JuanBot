@@ -1,8 +1,12 @@
 require('dotenv').config();
-//const youtubedl = require('youtube-dl');
-const youtubeSearch = require('youtube-search-promise');
-const ytdl = require('ytdl-core');
 const Config = process.env;
+//const youtubedl = require('youtube-dl');
+//const youtubeSearch = require('youtube-search-promise');
+
+const { google } = require('googleapis');
+const youtube = google.youtube({ version: 'v3', auth: Config.YOTUBEKEY });
+
+const ytdl = require('ytdl-core');
 
 var opts = {
 	maxResults: 1,
@@ -22,16 +26,18 @@ exports.play = async (client, msg, args) => {
   if (!args) return;
 
   var query = args.join(' ');
-  if(!query.toLowerCase().startsWith('http')) {
+	/*
+	if(!query.toLowerCase().startsWith('http')) {
     query = 'gvsearch1:' + query;
   }
+	*/
   msg.channel.send('Searching...').then(response => {
-    youtubeSearch(query, opts).catch(error => {
-	response.edit('Error occured while searching for song: '+err);
+    youtube.search.list({ part:'id,snippet', type: 'video', q: query, maxResults: 1, key: Config.YOUTUBEKEY}).catch(error => {
+	response.edit('Error occured while searching for song: '+error);
     }).then(info => {
-	console.log(info[0]);
-      response.edit('Added: ' + info[1].title).then(() => {
-        playlist.push(info[0]);
+	console.log(info['data']['items'][0]);
+      response.edit('Added: ' + info['data']['items'][0]['snippet']['title']).then(() => {
+        playlist.push(info['data']['items'][0]);
         if (playlist.length === 1) {
           music.executePlaylist(client, msg, playlist);
         }
@@ -53,11 +59,17 @@ exports.executePlaylist = (client, msg, playlist) => {
     }
   }).then(connection => {
     const song = playlist[0];
+		console.log(song);
 
     new Promise((resolve, reject) => {
-      music.players[msg.guild.id] = connection.playStream(ytdl(song.link, {filter: 'audioonly'}));
+			console.log(song);
+			var url = 'https://www.youtube.com/watch?v='+song['id']['videoId'];
+			console.log(url);
+      music.players[msg.guild.id] = connection.playStream(ytdl(url, {filter: 'audioonly'}));
+			console.log(music.players[msg.guild.id]);
       resolve(music.players[msg.guild.id]);
     }).then( player => {
+			console.log(player);
       player.on('end', () => {
         setTimeout(() => {
           if (playlist.length > 0) {
@@ -80,6 +92,7 @@ exports.executePlaylist = (client, msg, playlist) => {
 exports.getPlaylist = (client, id) => {
   var music = client.modules.get('music');
   if (!music.playlists[id]) music.playlists[id] = [];
+	//music.playlist[id].push('test');
   return music.playlists[id];
 };
 
@@ -87,10 +100,11 @@ exports.list = (client, msg) => {
   var music = client.modules.get('music');
   var songList = 'Current playlist:\n';
   var playlist = music.getPlaylist(client, msg.guild.id);
+	console.log(playlist);
   if(playlist.length > 0) {
-    songList += '>' + playlist[0].title + '\n';
+    songList += '>' + playlist[0]['snippet']['title'] + '\n';
     for(var i = 1; i < playlist.length; i++) {
-        songList += '-' + playlist[i].title + '\n';
+        songList += '-' + playlist[i]['snippet']['title'] + '\n';
     }
   }
   return songList;

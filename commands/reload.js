@@ -1,5 +1,6 @@
 const fs = require('fs');
 exports.run = (client, msg, args) => {
+  /*
   //Loading modules
   client.modules.deleteAll();
 
@@ -14,7 +15,7 @@ exports.run = (client, msg, args) => {
   		client.modules.set(moduleName, props);
   	});
   });
-
+  */
   //Loading commands
   client.commands.deleteAll();
 

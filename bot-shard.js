@@ -10,20 +10,27 @@ const fs = require('fs');
 const cassette = require('cassette');
 const ytdl = require('ytdl-core');
 const client = new Discord.Client();
-const express = require('express');
+//const express = require('express');
 const {Wit, log} = require('node-wit');
 
 client.shardClient = new Discord.ShardClientUtil(client);
 
+
+//music bot variables
+client.playlists = {};
+
+
 client.on('ready', () => {
 	console.log(`\n\nLogged in as ${client.user.tag}!`);
-	client.user.setActivity('juanbot.juanto3.me');
+	client.user.setActivity('At your servies!');
 
 	const port = parseInt(Config.PORT) + client.shardClient.id;
 
+	/*
 	const server = app.listen(port, () => {
 	  console.log(`Web server running on port ${port}`);
 	});
+	*/
 });
 
 
@@ -39,6 +46,7 @@ fs.readdir('./events/', (err, files) => {
 });
 
 //Loading modules
+/*
 client.modules = new Enmap();
 
 fs.readdir('./modules/', (err, files) => {
@@ -52,7 +60,7 @@ fs.readdir('./modules/', (err, files) => {
 		client.modules.set(moduleName, props);
 	});
 });
-
+*/
 
 //Loading commands
 client.commands = new Enmap();
@@ -78,7 +86,7 @@ process.on('uncaughtException', (err) => {
 client.login(Config.token);
 
 
-
+/*
 const app = express();
 app.set('view engine', 'pug');
 
@@ -94,7 +102,7 @@ app.get('/*', (req, res) => {
 	members = Array.from(new Set(members));
   res.render(__dirname + '/web' + file, {title: 'JuanBot Online users list', members: members});
 });
-
+*/
 
 
 /*
@@ -103,4 +111,3 @@ client.witClient = new Wit({
 	logger: new log.Logger(log.DEBUG)
 });
 */
-

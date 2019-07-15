@@ -1,4 +1,5 @@
 exports.run = (client, msg, args) => {
-  var music = client.modules.get('music');
-  music.players[msg.guild.id].resume();
+  var playlist = client.playlists[msg.guild.id];
+  if (!msg.guild.voiceConnection && !playlist.playing) return msg.channel.send('Music must be playing!');
+  msg.channel.send('Resumed').then(() => {playlist.dispatcher.resume();}); 
 };
