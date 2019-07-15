@@ -26,6 +26,7 @@
     "node-wit": "^5.0.0",
     "pug": "^2.0.4",
     "request": "^2.88.0",
+    "scrape-youtube": "0.0.5",
     "sodium": "^3.0.1",
     "streamify": "^1.0.0",
     "uws": "^99.0.0",

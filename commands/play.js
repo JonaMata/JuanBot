@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const search = require('scrape-youtube');
 
 exports.run = async (client, msg, args) => {
   if(args.length > 0) {
@@ -12,10 +13,10 @@ exports.run = async (client, msg, args) => {
       var query = args.join(' ');
 
       await msg.channel.send('Searching...').then(response => {
-        client.youtube.search.list({ part:'id,snippet', type: 'video', q: query, maxResults: 1, key: client.config.YOUTUBEKEY}).catch(error => {
+        search(query, { limit: 1, type: 'video' }).catch(error => {
     	response.edit('Error occured while searching for song: '+error);
         }).then(info => {
-          url = 'https://www.youtube.com/watch?v='+info['data']['items'][0]['id']['videoId'];
+          url = info[0]['link'];
           addSong(url, client, msg);
         });
       });
