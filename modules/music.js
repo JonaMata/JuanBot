@@ -1,3 +1,4 @@
+require('dotenv').config();
 //const youtubedl = require('youtube-dl');
 const youtubeSearch = require('youtube-search-promise');
 const ytdl = require('ytdl-core');

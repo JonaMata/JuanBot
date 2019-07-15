@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Config = process.env;
 
 const Sentry = require('@sentry/node');
