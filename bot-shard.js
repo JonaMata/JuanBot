@@ -13,6 +13,9 @@ const client = new Discord.Client();
 //const express = require('express');
 const {Wit, log} = require('node-wit');
 
+const { google } = require('googleapis');
+client.youtube = google.youtube({ version: 'v3', auth: process.env.YOTUBEKEY});
+
 client.shardClient = new Discord.ShardClientUtil(client);
 
 

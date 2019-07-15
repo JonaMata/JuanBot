@@ -1,5 +1,3 @@
-const { google } = require('googleapis');
-const youtube = google.youtube({ version: 'v3', auth: process.env.YOTUBEKEY});
 const ytdl = require('ytdl-core');
 
 exports.run = async (client, msg, args) => {
@@ -14,7 +12,7 @@ exports.run = async (client, msg, args) => {
       var query = args.join(' ');
 
       await msg.channel.send('Searching...').then(response => {
-        youtube.search.list({ part:'id,snippet', type: 'video', q: query, maxResults: 1, key: client.config.YOUTUBEKEY}).catch(error => {
+        client.youtube.search.list({ part:'id,snippet', type: 'video', q: query, maxResults: 1, key: client.config.YOUTUBEKEY}).catch(error => {
     	response.edit('Error occured while searching for song: '+error);
         }).then(info => {
           url = 'https://www.youtube.com/watch?v='+info['data']['items'][0]['id']['videoId'];
@@ -39,7 +37,7 @@ exports.run = async (client, msg, args) => {
         msg.member.voiceChannel.leave();
       });
 
-      msg.channel.send(`Playing **${song.title}** as requested by: **${song.requestor}**`);
+      msg.channel.send(`Playing **${song.title}** as requested by: **${song.requester}**`);
       playlist.dispatcher = msg.guild.voiceConnection.playStream(ytdl(song.url, { audioonly: true }));
 
       playlist.dispatcher.on('end', (reason) => {
