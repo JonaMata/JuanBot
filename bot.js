@@ -1,5 +1,10 @@
+
+
 const Discord = require('discord.js');
 const Config = process.env;
+
+const Sentry = require('@sentry/node');
+Sentry.init({ dsn: Config.SENTRYURL });
 
 const Sharder = new Discord.ShardingManager('bot-shard.js', {
   respawn: true,
