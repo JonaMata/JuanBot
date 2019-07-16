@@ -1,7 +1,7 @@
 exports.run = (client, msg, args) => {
   var commandFields = [];
   client.commands.keyArray().forEach(command => {
-    var helpValue = (client.commands.get(command).help) ? client.commands.get(command).help : 'No info provided';
+    var helpValue = (client.commands.get(command).help) ? client.commands.get(command).help(client.config.PREFIX) : 'No info provided';
     console.log(helpValue);
     commandFields.push({name: client.config.PREFIX + command, value: helpValue});
   });

@@ -5,4 +5,4 @@ exports.run = (client, msg, args) => {
   msg.reply(ranNum);
 };
 
-exports.help = "Gives you a random number within the range you specify.\nUsage: ?random [min] [max]";
+exports.help = (prefix) => { return `Gives you a random number within the range you specify.\nUsage: ${prefix}random [min] [max]` }

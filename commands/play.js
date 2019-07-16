@@ -40,10 +40,10 @@ exports.run = async (client, msg, args) => {
 
       msg.channel.send(`Playing **${song.title}** as requested by: **${song.requester}**`);
       playlist.dispatcher = msg.guild.voiceConnection.playStream(ytdl(song.url, { audioonly: true }));
+      playlist.stopReason = 'auto';
 
       playlist.dispatcher.on('end', (reason) => {
-        if (reason == 'user') return playlist.playing = false;;
-        console.log('song ended');
+        if (!(playlist.stopReason == 'auto' || playlist.stopReason == 'skip')) return playlist.playing = false;
         play(playlist.songs.shift());
       });
       playlist.dispatcher.on('error', (err) => {
@@ -61,10 +61,11 @@ function addSong(url, client, msg) {
   ytdl.getInfo(url, (err, info) => {
      if(err) return msg.channel.send('Invalid YouTube Link: ' + err);
      if (!client.playlists.hasOwnProperty(msg.guild.id)) client.playlists[msg.guild.id] = {}, client.playlists[msg.guild.id].playing = false, client.playlists[msg.guild.id].songs = [];
-     client.playlists[msg.guild.id].songs.push({url: url, title: info.title, requester: msg.author.username});
+     var playlist = client.playlists[msg.guild.id];
+     playlist.songs.push({url: url, title: info.title, requester: msg.author.username});
      msg.channel.send(`Added **${info.title}** to the queue.`);
 
-     if (client.playlists[msg.guild.id].songs.length == 1 && !client.playlists[msg.guild.id].playing) {
+     if (playlist.songs.length == 1 && !playlist.playing && !playlist.rickroll) {
        client.commands.get('play').run(client, msg, []);
      }
   });
