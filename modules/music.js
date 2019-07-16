@@ -35,7 +35,6 @@ exports.play = async (client, msg, args) => {
     youtube.search.list({ part:'id,snippet', type: 'video', q: query, maxResults: 1, key: Config.YOUTUBEKEY}).catch(error => {
 	response.edit('Error occured while searching for song: '+error);
     }).then(info => {
-	console.log(info['data']['items'][0]);
       response.edit('Added: ' + info['data']['items'][0]['snippet']['title']).then(() => {
         playlist.push(info['data']['items'][0]);
         if (playlist.length === 1) {
@@ -59,17 +58,12 @@ exports.executePlaylist = (client, msg, playlist) => {
     }
   }).then(connection => {
     const song = playlist[0];
-		console.log(song);
 
     new Promise((resolve, reject) => {
-			console.log(song);
 			var url = 'https://www.youtube.com/watch?v='+song['id']['videoId'];
-			console.log(url);
       music.players[msg.guild.id] = connection.playStream(ytdl(url, {filter: 'audioonly'}));
-			console.log(music.players[msg.guild.id]);
       resolve(music.players[msg.guild.id]);
     }).then( player => {
-			console.log(player);
       player.on('end', () => {
         setTimeout(() => {
           if (playlist.length > 0) {
@@ -80,12 +74,10 @@ exports.executePlaylist = (client, msg, playlist) => {
           }
         }, 1000);
     }).catch(err => {
-      console.log(err);
     });
 
     });
   }).catch(err => {
-    console.log(err);
   });
 };
 
@@ -100,7 +92,6 @@ exports.list = (client, msg) => {
   var music = client.modules.get('music');
   var songList = 'Current playlist:\n';
   var playlist = music.getPlaylist(client, msg.guild.id);
-	console.log(playlist);
   if(playlist.length > 0) {
     songList += '>' + playlist[0]['snippet']['title'] + '\n';
     for(var i = 1; i < playlist.length; i++) {
