@@ -24,11 +24,17 @@ module.exports = class PlaylistCommand extends Command {
 
     if(playlist.currentSong) {
       let song = playlist.currentSong
+
+      embed.title = `:play_pause: ${song.title}`;
+      embed.description = `By **${song.artist}**
+        Progress: **${Math.floor(playlist.dispatcher.time / 60000)}:${Math.floor((playlist.dispatcher.time % 60000)/1000) <10 ? '0'+Math.floor((playlist.dispatcher.time % 60000)/1000) : Math.floor(playlist.dispatcher.time % 60000/1000)} - ${Math.floor(song.duration/60)}:${song.duration%60 < 10 ? 0 : ''}${song.duration%60}**
+        Requested by: **${song.requester}**`;
+      embed.url = song.url;
+      embed.thumbnail = { url: song.thumbnail };
+
       embed.fields.push({
-        name: `>${song.title}`,
-        value: `By **${song.artist}**
-          Progress: **${Math.floor(playlist.dispatcher.time / 60000)}:${Math.floor((playlist.dispatcher.time % 60000)/1000) <10 ? '0'+Math.floor((playlist.dispatcher.time % 60000)/1000) : Math.floor(playlist.dispatcher.time % 60000/1000)} - ${Math.floor(song.duration/60)}:${song.duration%60 < 10 ? 0 : ''}${song.duration%60}**
-          Requested by: **${song.requester}**`
+        name: `${msg.guild.name}'s Playlist:`,
+        value: `Currently **${playlist.songs.length}** songs queued`
       });
     }
 
