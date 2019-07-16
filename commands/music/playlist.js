@@ -35,7 +35,7 @@ module.exports = class PlaylistCommand extends Command {
   	playlist.songs.forEach((song, i) => {
       embed.fields.push({
         name: `${i+1}. ${song.title}`,
-        description: `By **${song.artist}**
+        value: `By **${song.artist}**
           Duration: **${Math.floor(song.duration/60)}:${song.duration%60 < 10 ? 0 : ''}${song.duration%60}**
           Requested by: **${song.requester}**`
         });
