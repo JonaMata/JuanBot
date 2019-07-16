@@ -7,12 +7,7 @@ Sentry.init({ dsn: Config.SENTRYURL });
 const Discord = require('discord.js');
 const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
-const Enmap = require('enmap');
 const fs = require('fs');
-const cassette = require('cassette');
-const ytdl = require('ytdl-core');
-
-
 
 const client = new CommandoClient({
 	commandPrefix: Config.PREFIX,
@@ -31,18 +26,10 @@ client.registry
 	.registerDefaultCommands()
 	.registerCommandsIn(path.join(__dirname, 'commands'));
 
-//const express = require('express');
-const {Wit, log} = require('node-wit');
-
-const { google } = require('googleapis');
-client.youtube = google.youtube({ version: 'v3', auth: process.env.YOTUBEKEY});
-
 client.shardClient = new Discord.ShardClientUtil(client);
-
 
 //music bot variables
 client.playlists = {};
-
 
 client.on('ready', () => {
 	console.log(`\n\nLogged in as ${client.user.tag}!`);
@@ -50,9 +37,6 @@ client.on('ready', () => {
 
 	const port = parseInt(Config.PORT) + client.shardClient.id;
 });
-
-
-client.config = Config;
 
 fs.readdir('./events/', (err, files) => {
 	if (err) return console.error(err);
@@ -63,4 +47,5 @@ fs.readdir('./events/', (err, files) => {
 	});
 });
 
+client.config = Config;
 client.login(Config.token);
