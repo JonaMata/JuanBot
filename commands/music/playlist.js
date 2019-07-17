@@ -31,7 +31,7 @@ module.exports = class PlaylistCommand extends Command {
 
       let song = playlist.currentSong
 
-      embed.title = `:play_pause: ${song.title}`;
+      embed.title = `${playlist.dispatcher.paused ? ':pause_button:' : ':arrow_forward:'} ${song.title}`;
       embed.description = `By **${song.artist}**
         Progress: **${Math.floor(playlist.dispatcher.time / 60000)}:${Math.floor((playlist.dispatcher.time % 60000)/1000) <10 ? '0'+Math.floor((playlist.dispatcher.time % 60000)/1000) : Math.floor(playlist.dispatcher.time % 60000/1000)} - ${Math.floor(song.duration/60)}:${song.duration%60 < 10 ? 0 : ''}${song.duration%60}**
         Requested by: **${song.requester}**`;
