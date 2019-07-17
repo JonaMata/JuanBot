@@ -18,11 +18,17 @@ module.exports = class PlaylistCommand extends Command {
     const embed = {
       color: 2447003,
       title: `${msg.guild.name}'s Playlist:`,
-      description: `Currently **${playlist.songs.length}** songs queued`,
+      description: `Currently **${playlist.songs.length}** songs queued, autoplay is **${playlist.autoplay? 'on':'off'}**`,
       fields: []
     }
 
-    if(playlist.currentSong) {
+    if(playlist.currentSong && playlist.playing) {
+
+      embed.fields.push({
+        name: embed.title,
+        value: embed.description
+      });
+
       let song = playlist.currentSong
 
       embed.title = `:play_pause: ${song.title}`;
@@ -32,10 +38,6 @@ module.exports = class PlaylistCommand extends Command {
       embed.url = song.url;
       embed.thumbnail = { url: song.thumbnail };
 
-      embed.fields.push({
-        name: `${msg.guild.name}'s Playlist:`,
-        value: `Currently **${playlist.songs.length}** songs queued`
-      });
     }
 
   	playlist.songs.forEach((song, i) => {
