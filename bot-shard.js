@@ -9,6 +9,8 @@ const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const fs = require('fs');
 
+const Lyricist = require('lyricist');
+
 const client = new CommandoClient({
 	commandPrefix: Config.PREFIX,
 	owner: Config.ADMINID,
@@ -20,6 +22,7 @@ client.registry
 	.registerGroups([
 		['basic', 'Basic'],
 		['music', 'Music'],
+		['google', 'Google'],
 		['admin', 'Admin']
 	])
 	.registerDefaultGroups()
@@ -30,6 +33,7 @@ client.shardClient = new Discord.ShardClientUtil(client);
 
 //music bot variables
 client.playlists = {};
+client.lyricist = new Lyricist(Config.GENIUSTOKEN);
 
 client.on('ready', () => {
 	console.log(`\n\nLogged in as ${client.user.tag}!`);
