@@ -19,7 +19,7 @@ module.exports = class ImageCommand extends Command {
           default: 1,
           validate: amount => {
             const maxAmount = 10;
-            if(amount>1 && amount<maxAmount) return true;
+            if(amount>0 && amount<maxAmount) return true;
             return `Amount must have a value from **1** to **${maxAmount}**.`;
           }
         },
