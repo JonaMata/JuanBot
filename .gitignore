@@ -1,3 +1,6 @@
+#Storage files
+*.sqlite3
+
 #Config files
 config.json
 

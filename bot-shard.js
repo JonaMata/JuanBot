@@ -5,16 +5,18 @@ const Sentry = require('@sentry/node');
 Sentry.init({ dsn: Config.SENTRYURL });
 
 const Discord = require('discord.js');
-const { CommandoClient } = require('discord.js-commando');
+const { CommandoClient, SQLiteProvider } = require('discord.js-commando');
 const path = require('path');
 const fs = require('fs');
+const sqlite = require('sqlite');
 
 const Lyricist = require('lyricist');
 
 const client = new CommandoClient({
 	commandPrefix: Config.PREFIX,
 	owner: Config.ADMINID,
-	disableEveryone: true
+	disableEveryone: true,
+	commandEditableDuration: 0
 });
 
 client.registry
@@ -28,6 +30,10 @@ client.registry
 	.registerDefaultGroups()
 	.registerDefaultCommands()
 	.registerCommandsIn(path.join(__dirname, 'commands'));
+
+client.setProvider(
+	sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => new SQLiteProvider(db))
+).catch(console.error);
 
 client.shardClient = new Discord.ShardClientUtil(client);
 
