@@ -29,7 +29,7 @@ module.exports = class PlayCommand extends Command {
                 let url;
 
                 if (query.startsWith('http')) {
-                    url = args[0];
+                    url = query;
                     this.addSong(url, msg, response);
                 } else {
                     search(query, {limit: 1, type: 'video'}).catch(error => {
