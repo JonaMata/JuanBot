@@ -24,7 +24,6 @@ client.registry
 	.registerGroups([
 		['basic', 'Basic'],
 		['music', 'Music'],
-		['google', 'Google'],
 		['admin', 'Admin']
 	])
 	.registerDefaultGroups()
@@ -44,8 +43,6 @@ client.lyricist = new Lyricist(Config.GENIUSTOKEN);
 client.on('ready', () => {
 	console.log(`\n\nLogged in as ${client.user.tag}!`);
 	client.user.setActivity('At your servies!');
-
-	const port = parseInt(Config.PORT) + client.shardClient.id;
 });
 
 fs.readdir('./events/', (err, files) => {
