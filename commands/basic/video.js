@@ -18,9 +18,8 @@ module.exports = class VideoCommand extends Command {
     const videoUrl = `https://www.discordapp.com/channels/${msg.guild.id}/${voiceChannel.id}`;
     const embed = {
       color: 2447003,
-      title: `${voiceChannel.name}'s Video Link`,
-      url: videoUrl,
-      description: `Join the video call of ${voiceChannel.name}!`
+      title: `Join the video call of ${voiceChannel.name}!`,
+      description: url,
     };
     msg.channel.send('', {embed: embed});
   }
