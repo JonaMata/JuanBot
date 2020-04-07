@@ -44,7 +44,7 @@ client.lyricist = new Lyricist(Config.GENIUSTOKEN);
 
 client.on('ready', () => {
 	console.log(`\n\nLogged in as ${client.user.tag}!`);
-	client.user.setActivity('At your servies!');
+	client.user.setActivity('By JonaMata#8249');
 });
 
 fs.readdir('./events/', (err, files) => {
