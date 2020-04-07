@@ -14,12 +14,11 @@ module.exports = class VideoCommand extends Command {
   run(msg) {
     const voiceChannel = msg.member.voiceChannel;
     if (!voiceChannel || voiceChannel.type !== 'voice') return msg.reply('You need to be in a voice channel to use this command.');
-    voiceChannel.join().then(connection => resolve(connection)).catch(err => reject(err));
     const videoUrl = `https://www.discordapp.com/channels/${msg.guild.id}/${voiceChannel.id}`;
     const embed = {
       color: 2447003,
       title: `Join the video call of ${voiceChannel.name}!`,
-      description: url,
+      description: videoUrl,
     };
     msg.channel.send('', {embed: embed});
   }
