@@ -19,6 +19,8 @@ const client = new CommandoClient({
 	commandEditableDuration: 0
 });
 
+client.commands = new Discord.Collection();
+
 client.registry
 	.registerDefaultTypes()
 	.registerGroups([
