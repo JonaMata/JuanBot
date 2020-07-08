@@ -1,7 +1,7 @@
 const {Command} = require('discord.js-commando');
 
 const ytdl = require('ytdl-core');
-const search = require('scrape-youtube');
+const youtube = require('scrape-youtube');
 
 module.exports = class PlayCommand extends Command {
     constructor(client) {
@@ -32,7 +32,7 @@ module.exports = class PlayCommand extends Command {
                     url = query;
                     this.addSong(url, msg, response);
                 } else {
-                    search(query, {limit: 1, type: 'video'}).catch(error => {
+                    youtube.default.search(query, {limit: 1, type: 'video'}).catch(error => {
                         response.edit('Error occured while searching for song: ' + error);
                     }).then(info => {
                         url = info[0]['link'];
