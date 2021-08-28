@@ -35,7 +35,8 @@ module.exports = class PlayCommand extends Command {
                     youtube.default.search(query, {limit: 1, type: 'video'}).catch(error => {
                         response.edit('Error occured while searching for song: ' + error);
                     }).then(info => {
-                        url = info[0]['link'];
+                        url = info['videos'][0]['link'];
+                        console.log(url);
                         this.addSong(url, msg, response);
                     });
                 }
@@ -93,23 +94,24 @@ module.exports = class PlayCommand extends Command {
     addSong(url, msg, response) {
         return new Promise((resolve, reject) => {
             if (url === undefined) return response.edit('Your song query should be a valid youtube url or a text query');
-            ytdl.getInfo(url, (err, info) => {
-                if (err) return response.edit('Invalid YouTube Link: ' + err);
+            ytdl.getInfo(url).catch(err => {
+                return response.edit('Invalid YouTube Link: ' + err);
+            }).then(info => {
                 if (!this.client.playlists.hasOwnProperty(msg.guild.id)) this.client.playlists[msg.guild.id] = {}, this.client.playlists[msg.guild.id].playing = false, this.client.playlists[msg.guild.id].autoplay = false, this.client.playlists[msg.guild.id].songs = [];
                 var playlist = this.client.playlists[msg.guild.id];
 
-                var videoDetails = info.player_response.videoDetails;
+                var videoDetails = info.videoDetails;
                 var thumbnails = videoDetails.thumbnail.thumbnails;
                 var thumbnailUrl = thumbnails[thumbnails.length - 1].url.split('?')[0];
 
-                let title = info.title;
-                let artist = info.author.name;
+                let title = info.videoDetails.title;
+                let artist = info.videoDetails.author.name;
                 if (info.media) {
-                    if (info.media.song) {
-                        title = info.media.song;
+                    if (info.videoDetails.media.song) {
+                        title = info.videoDetails.media.song;
                     }
-                    if (info.media.artist) {
-                        artist = info.media.artist;
+                    if (info.videoDetails.media.artist) {
+                        artist = info.videoDetails.media.artist;
                     }
                 }
 
@@ -118,10 +120,10 @@ module.exports = class PlayCommand extends Command {
                     title: title,
                     artist: artist,
                     media: info.media,
-                    duration: info.length_seconds,
+                    duration: info.videoDetails.lengthSeconds,
                     thumbnail: thumbnailUrl,
                     requester: msg.author.username,
-                    autoplay: 'https://www.youtube.com/watch?v='+info.related_videos[0].id
+                    autoplay: 'https://www.youtube.com/watch?v=' + info.related_videos[0].id
                 };
                 playlist.songs.push(song);
                 response.edit('Added:', {embed: this.getEmbed(song)});
